@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ぽちポケ</title>
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <h1 id="status"> Login... </h1>
+
+    <!-- コンテンツ表示画面 -->
+    <header>
+        <div class="header-wrapping">
+            <div class="header-title-font">
+                <button id="list_display_switch">三</button>
+                <h1 class="header-font">ぽちポケ</h1>
+                <img src="./img/bisyonn.png" alt="">
+            </div>
+            <input type="text" id="search-box" placeholder="search">
+            <div class="header-text">
+                <img src="" id="prof">
+                <span id="uname"></span><!-- ユーザー名表示 -->
+                <button id="out">logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="side-menu-container">
+                <!-- サイドメニュー -->
+                <div class="side-menu">
+                    <div class="notebooks">
+                        <div class="notebooks-button">
+                            <input type="text" id="new-folder-name" placeholder="New Folder Name">
+                            <!-- 修正: フォルダ名入力フィールド -->
+                            <button id="new-folder">＋</button> <!-- 修正: フォルダ新規作成ボタン -->
+                        </div>
+                        <span>NOTEBOOKS</span>
+                        <button id="list_display">▽</button>
+                        <div id="folder-list" class="hidden list">
+                            <!-- ここに追加データが挿入される -->
+                        </div>
+                    </div>
+
+                    <div class="tag-menu">
+                        <span>TAGS</span>
+                        <button id="tag_list_display">▽</button>
+                        <div id="tag_list" class="hidden list">
+                            <!-- ここに追加データが挿入される -->
+                        </div>
+                    </div>
+
+                    <div class="reg-menu">
+                        <span>REGISTRATION</span>
+                        <button id="reg_list_display">▽</button>
+                        <button id="new-reg">＋</button> <!-- 修正: フォルダ新規作成ボタン -->
+                        <div id="reg_list" class="hidden list">
+                            <!-- ここに追加データが挿入される -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- サイドメニュー2 -->
+                <div class="side-menu2">
+                    <div class="page">
+                        <span>PAGE</span>
+                        <button id="page_list_display">▽</button>
+                        <button id="new-key">＋</button>
+                        <div id="title-list" class="hidden list">
+                            <!-- ここに追加データが挿入される -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- メインメニュー -->
+            <div class="main-contents">
+                <input type="text" id="key" placeholder="タイトル">
+                <textarea id="memo" placeholder="メモを入力"></textarea>
+                <div>
+                    <input type="text" id="tags" placeholder="タグを追加 (カンマ区切りで入力)">
+                </div>
+                <div class="main-fotter-button">
+                    <button id="save-to-folder">save</button>
+                </div>
+            </div>
+    </main>
+
+    <!-- jQueryの読み込み -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+    <script src="js/main.js"></script>
+    <!-- 以下firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.13.0/firebase-app.js";
+        import { getDatabase, ref, push, set, onValue, onChildAdded, remove, onChildRemoved } from "https://www.gstatic.com/firebasejs/9.13.0/firebase-database.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.13.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDVq2QiPiot5hzhUMdrlj1ibJZPctDcTV4",
+            authDomain: "pochi-6400b.firebaseapp.com",
+            databaseURL: "https://pochi-6400b-default-rtdb.firebaseio.com",
+            projectId: "pochi-6400b",
+            storageBucket: "pochi-6400b.appspot.com",
+            messagingSenderId: "882528790400",
+            appId: "1:882528790400:web:77c694ec929d3ca6698365"
+        };
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app); //RealtimeDBに接続
+        const provider = new GoogleAuthProvider();
+        provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+        const auth = getAuth();
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const uid = user.uid;
+                if (user !== null) {
+                    user.providerData.forEach((profile) => {
+                        $("#uname").text(profile.displayName);
+                        $("#prof").attr("src", profile.photoURL);
+                    });
+                    $("#status").fadeOut(500);
+                }
+            }
+        })
+
+        //###############################################
+        //Loginしていれば処理します
+        //###############################################
+        // "新規登録"ボタンがクリックされたときにpost.phpの内容を読み込む
+        $(document).ready(function () {
+            $('#new-reg').on('click', function () {
+                $('.main-contents').load('post.php');
+            });
+        });
+
+        // 新規フォルダ作成関数
+        function createNewFolder(folderName) {
+            const folderRef = ref(db, `users/${auth.currentUser.uid}/folders/${folderName}`);
+            set(folderRef, { created: true }).then(() => {
+                console.log("Folder created:", folderName);
+            }).catch((error) => {
+                console.error("Error creating folder:", error);
+            });
+        }
+
+        // 新規フォルダ作成ボタンのイベントリスナー
+        $('#new-folder').on('click', function () {
+            const folderName = $('#new-folder-name').val().trim();
+            if (folderName) {
+                createNewFolder(folderName);
+            } else {
+                alert("Please enter a folder name");
+            }
+        });
+
+        // 任意のフォルダにメッセージを保存する関数
+        function saveMessageInFolder(folderName, title, text, tags) {
+            const msg = { title, text, tags };
+            const dbRef = ref(db, `users/${auth.currentUser.uid}/folders/${folderName}/title/${title}`);
+            set(dbRef, msg).then(() => {
+                console.log(`Message saved in ${folderName}`);
+            }).catch((error) => {
+                console.error("Error saving data:", error);
+            });
+        }
+
+        // 任意のフォルダに保存するボタンのイベントリスナー
+        $('#save-to-folder').on('click', function () {
+            const folderName = $('#new-folder-name').val().trim();
+            if (folderName) {
+                const title = $('#key').val();
+                const text = $('#memo').val();
+                const tags = $('#tags').val().split(',').map(tag => tag.trim());
+                saveMessageInFolder(folderName, title, text, tags);
+            } else {
+                alert("Please enter a folder name");
+            }
+        });
+
+        // jQueryを使用してイベントハンドラを設定
+        $(document).ready(function () {
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    const uid = user.uid;
+                    fetchAndShowFolders(uid);
+                }
+            });
+
+            // フォルダ名のクリックイベントを設定（デリゲーションを使用）
+            $("#folder-list").on("click", ".folder-item", function () {
+                $("#folder-list .folder-item").removeClass('selected');
+                $(this).addClass('selected');
+                const folderName = $(this).text();
+                fetchAndShowTitles(auth.currentUser.uid, folderName);
+            });
+
+            // タイトルのクリックイベントを設定（デリゲーションを使用）
+            $("#title-list").on("click", ".title-item", function () {
+                const titleName = $(this).text(); // クリックされたタイトル名を取得
+                const folderName = $("#folder-list .folder-item.selected").text(); // 選択されているフォルダ名を取得
+
+                fetchAndDisplayTitleDetails(auth.currentUser.uid, folderName, titleName);
+            });
+        });
+
+        // フォルダ名を表示させる
+        function fetchAndShowFolders(uid) {
+            const userFoldersRef = ref(db, `users/${uid}/folders`);
+            $("#folder-list").removeClass('hidden');
+            onChildAdded(userFoldersRef, (snapshot) => {
+                const folderName = snapshot.key;
+                const item = $('<div>').addClass('folder-item clickable-item').text(folderName);
+                const deleteButton = $('<button>').addClass('delete-button').append($('<img>').attr('src', "img/trush.png").attr('alt', 'Delete'));
+
+                deleteButton.on('click', function (e) {
+                    e.stopPropagation(); // このイベントが親要素へ伝播しないように停止
+                    remove(ref(db, `users/${uid}/folders/${folderName}`)); // フォルダをデータベースから削除
+                    item.remove(); // DOMからこのフォルダ要素を削除
+                });
+
+                item.append(deleteButton); // 削除ボタンをフォルダ要素に追加
+                $('#folder-list').append(item); // 完成したフォルダ要素をリストに追加
+            });
+        }
+
+        // タイトルを表示させる関数
+        function fetchAndShowTitles(uid, folderName) {
+            const titlesRef = ref(db, `users/${uid}/folders/${folderName}/title`); // パスを修正
+            $("#title-list").empty(); // 既存のタイトルをクリア
+            onValue(titlesRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnapshot) => {
+                        const titleData = childSnapshot.val();
+                        const titleItem = $('<div>').addClass('title-item clickable-item').text(titleData.title); // タイトル名を取得するプロパティ名を確認して修正
+                        $("#title-list").append(titleItem);
+                    });
+                } else {
+                    $("#title-list").append($('<div>').addClass('title-item clickable-item').text('No titles found in this folder'));
+                }
+                $("#title-list").removeClass('hidden'); // title-listを表示
+            });
+        }
+
+        // タイトルの詳細を表示する関数
+        function fetchAndDisplayTitleDetails(uid, folderName, titleText) {
+            const titleRef = ref(db, `users/${uid}/folders/${folderName}/title/${titleText}`);
+            onValue(titleRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    $('#key').val(data.title || titleText); // タイトル
+                    $('#memo').val(data.text); // メモ
+                    $('#tags').val(data.tags ? data.tags.join(', ') : ''); // タグ（配列をカンマ区切り文字列に変換）
+                }
+            });
+        }
+
+
+        // 【要修正】ーーーーータグの処理ーーーーーー※削除しないこと！！！
+        // タグをすべて取得して表示する関数
+        function fetchAndShowTags(uid) {
+            const tugRef = ref(db, `users/${uid}/folders/${folderName}/title`); // ユーザーのメモリファレンスを取得
+            const tagCounts = {}; // タグのカウントを格納するオブジェクト
+
+            onChildAdded(usermemoRef, (snapshot) => {
+                const memoData = snapshot.val(); // データスナップショットを取得
+                if (memoData && memoData.tags) {
+                    memoData.tags.forEach((tag) => {
+                        tagCounts[tag] = (tagCounts[tag] || 0) + 1; // タグのカウントを増やす
+                    });
+                    showAllTags(tagCounts); // タグを表示する関数を呼び出す
+                }
+            }, (error) => {
+                console.error("Error fetching tags:", error); // エラーをログに出力
+            });
+        }
+
+        // タグを表示する関数
+        function showAllTags(tagCounts) {
+            $("#tag_list").empty(); // 既存のタグをクリア
+            Object.entries(tagCounts).forEach(([tag, count]) => {
+                const tagItem = $('<div>').addClass('tag-item').text(`# ${tag} [${count}]`);
+                $("#tag_list").append(tagItem); // タグアイテムを追加
+            });
+        }
+
+        // ーーーーー検索の処理ーーーーーー※削除しないこと！！！
+        $('#search-box').on('input', function () {
+            const searchQuery = $(this).val().toLowerCase();
+            $('.clickable-item').each(function () {
+                const itemText = $(this).text().toLowerCase();
+                if (itemText.includes(searchQuery)) {
+                    $(this).show(); // 検索に一致する場合は表示
+                } else {
+                    $(this).hide(); // 一致しない場合は非表示
+                }
+            })
+        });
+
+        //###############################################
+        //Logout処理
+        //###############################################
+        $("#out").on("click", function () {
+            signOut(auth).then(() => {
+                _redirect();
+            }).catch((error) => {
+                console.error(error);
+            });
+        });
+
+        //###############################################
+        //Login画面へリダイレクト作成)
+        //###############################################
+
+        function _redirect() {
+            location.href = "login.html";
+        }
+    </script>
+</body>
+
+</html>

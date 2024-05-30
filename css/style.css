@@ -1,0 +1,443 @@
+/* login画面設定 */
+.login-wrapping {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* 垂直方向の中央揃え */
+    height: 100vh;
+    /* 画面全体を使用 */
+    /* background-color: #79A1D4; */
+    background-image: url(/img/okumono-cat46.png);
+    /* background-repeat: repeat; */
+}
+
+.login-button {
+    padding: 10px 80px;
+    /* ボタンの内側の余白 */
+    font-size: 16px;
+    /* フォントサイズ */
+    background-color: #E9E9E9;
+    color: #79A1D4;
+    /* ボタンの背景色 */
+    border: none;
+    /* ボーダーなし */
+    border-radius: 10px;
+    /* ボタンの角を丸く */
+    cursor: pointer;
+    /* ホバー時にポインタ表示 */
+}
+/* login画面設定終了 */
+
+.body {
+    height: 100%;
+    overflow-x: hidden;
+    background-color: #FFEED5;
+    /*横スクロールバーを消す*/
+}
+
+.header-wrapping {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #79A1D4;
+    color: #E9E9E9;
+}
+
+.header-wrapping img{
+    height: 50px;
+}
+
+.header-title-font{
+    display: flex;
+    align-items: center;
+}
+
+.header-font {
+    font-size: 30px;
+    padding: 5px;
+}
+
+#search-box {
+    margin: 5px;
+    border: 1px solid #fff;
+    color: #79A1D4;
+    opacity: .7;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    width: 400px;
+    transition: all .3s;
+    -webkit-transition: all .3s;
+    -moz-transition: all .3s;
+    font-size: 16px;
+    outline: none;
+    /* background-color: #acacac; */
+}
+
+#search-box:focus {
+    width: 500px;
+    outline: none;
+}
+
+.header-text {
+    display: flex;
+    align-items: center;
+}
+
+.header-text img {
+    border-radius: 50%;
+    /* 角丸半径を50%にする(=円形にする) */
+    width: 30px;
+    height: auto;
+    padding: 5px;
+}
+
+#out {
+    background-color: #9FBCDF; /* 背景色を赤に */
+    color: white; /* テキストを白に */
+    border: none; /* ボーダーなし */
+    border-radius: 5px; /* 角を丸くする */
+    padding: 8px 16px; /* 内側の余白 */
+    font-size: 14px; /* フォントサイズ */
+    cursor: pointer; /* カーソルをポインタに */
+    transition: background-color 0.3s; /* 背景色の変更をスムーズに */
+}
+
+#out:hover {
+    background-color: #ABCAE8; /* マウスオーバー時の背景色を薄くする */
+}
+
+.container {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    height: 100vh;
+    /* 画面全体を使用するように高さを指定 */
+}
+
+.side-menu-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.side-menu, .side-menu2 {
+    width: 15%;
+    padding: 10px;
+    position: absolute;
+    min-height: 100vh;
+    background-color: #454545;
+    display: flex;
+    flex-direction: column;
+    color: #E9E9E9;
+    box-sizing: border-box;  /* パディングとボーダーを幅に含める */
+}
+
+.side-menu {
+    left: 0;  /* 左端から配置 */
+    z-index: 2;  /* 他の要素より前面に表示 */
+}
+
+.side-menu2 {
+    left: 15%;  /* side-menuの幅の分だけ右に配置 */
+    background-color: #454545;  /* ここで色を変えて識別しやすく */
+    z-index: 1;  /* side-menuの背後に配置 */
+    border-right: 20px solid #FFEED5;
+    border-left: 1px solid #ABCAE8;
+}
+
+/* ノートブックアイテムに flex スタイルを適用 */
+.notebooks .clickable-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+/* タイトルとタグをひとつの要素として表示する */
+.item-content {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+}
+
+.item-title {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.item-tags {
+    color: #888897;
+    font-size: 0.9em;
+}
+
+.notebooks-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#new-folder-name {
+    margin: 5px;
+    border: 1px solid #fff;
+    color: #79A1D4;
+    opacity: .7;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+    width: 150px;
+    transition: all .3s;
+    -webkit-transition: all .3s;
+    -moz-transition: all .3s;
+    font-size: 16px;
+    outline: none;
+    /* background-color: #acacac; */
+}
+
+/* デリートボタンのCSSスタイル */
+.delete-button {
+    margin-left: auto; /* ボタンを右端に寄せる */
+    background-color: #79A1D4; /* 背景色を赤に */
+    color: white; /* テキストを白に */
+    border: none; /* ボーダーなし */
+    border-radius: 5px; /* 角を丸くする */
+    padding: 4px 8px; /* 内側の余白 */
+    font-size: 12px; /* フォントサイズ */
+    cursor: pointer; /* カーソルをポインタに */
+    transition: background-color 0.3s; /* 背景色の変更をスムーズに */
+}
+
+.delete-button:hover {
+    background-color: #ABCAE8; /* マウスオーバー時の背景色を薄くする */
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+}
+
+#folder-list, #tag_list, 
+#reg_list, #title-list {
+    display: none;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+/* サイドメニューを縮小したときのスタイル */
+.collapsed {
+    width: 50px;
+    /* 縮小する幅 */
+    border-right: 5px solid #FFEED5;
+    /* 縮小時のボーダーを狭める */
+    margin-right: 5px;
+    /* 縮小時も間隔を保つ */
+    overflow: hidden;
+    /* はみ出した要素を非表示に */
+}
+
+.collapsed #list_display_switch {
+    display: block;
+    /* ボタンは表示 */
+}
+
+.collapsed .notebooks 
+.collapsed .tag-menu
+.reg-menu{
+    display: none;
+    /* 他の要素は非表示 */
+}
+/* サイドメニューを縮小したときのスタイル終わり */
+
+/* sidemenuの要素クリックのために追加 */
+.clickable-item {
+    cursor: pointer;
+    border-bottom: 1px solid #9FBCDF;
+    padding: 10px;
+}
+
+.clickable-item:hover {
+    background-color: #9FBCDF;
+}
+
+#list_display_switch {
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+    padding: 5px 5px;
+    /* ボタンの内側の余白 */
+    background-color: #79A1D4;
+    font-size: 20px;
+    /* 背景色 */
+    color: #EAE4DA;
+    /* テキストの色 */
+    border: none;
+    /* ボーダーを消す */
+    border-radius: 5px;
+    /* 角を丸くする */
+    cursor: pointer;
+    /* カーソルをポインタに */
+    z-index: 1;
+    /* 他の要素より前に表示する */
+    transition: background-color 0.3s; /* 背景色の変更をスムーズに */
+}
+
+#list_display_switch:hover {
+    background-color: #ABCAE8; /* マウスオーバー時の背景色を薄くする */
+}
+
+#new-folder, #new-reg, #new-key {
+    padding: 5px 10px;
+    /* ボタンの内側の余白 */
+    background-color: #79A1D4;
+    /* 背景色 */
+    color: #EAE4DA;
+    /* テキストの色 */
+    border: none;
+    /* ボーダーを消す */
+    border-radius: 5px;
+    /* 角を丸くする */
+    cursor: pointer;
+    /* カーソルをポインタに */
+    z-index: 1;
+    /* 他の要素より前に表示する */
+    transition: background-color 0.3s; /* 背景色の変更をスムーズに */
+}
+
+#new-folder:hover, #new-reg:hover, 
+#new-key:hover {
+    background-color: #ABCAE8; /* マウスオーバー時の背景色を薄くする */
+}
+
+#list_display, #tag_list_display, 
+#reg_list_display, #page_list_display{
+    padding: 5px 10px;
+    /* ボタンの内側の余白 */
+    background-color: #454545;
+    /* 背景色 */
+    color: #EAE4DA;
+    /* テキストの色 */
+    border: none;
+    /* ボーダーを消す */
+    border-radius: 5px;
+    /* 角を丸くする */
+    cursor: pointer;
+    /* カーソルをポインタに */
+    z-index: 1;
+    /* 他の要素より前に表示する */
+}
+
+/* .delete-button {
+    /* margin-left: 10px; */
+    /* display: flex;
+} */ 
+
+.main-contents {
+    margin-left: calc(30%); 
+    /* 2つのサイドメニューの幅(15%幅づつ) + border */
+    padding: 10px;
+    background-color: #FFEED5;
+    flex: 1;
+    /* メインコンテンツが横幅全体に広がるように */
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    /* 重なりを避けるためにrelativeを設定 */
+    min-height: 100vh;
+    /* サイドメニューと同じ高さにするため追加 */
+    overflow-y: auto;
+    /* 縦スクロールを可能に */
+}
+
+/* 記入ボックスに枠をつける */
+#key,
+#memo,
+#tags {
+    width: calc(90% - 30px);
+    padding: 10px 15px;
+    border-radius: 10px;
+    transition: .3s ease;
+    color: #868283;
+    margin: 10px auto;
+    /* 縦に揃えるため、左右のマージンをautoに設定 */
+    display: block;
+    /* ブロック要素として扱う */
+    border: 0px solid #868283;
+    font-family: inherit; /* 親要素から継承するように設定 */
+    font-size: 16px; /* 必要に応じてサイズを調整 */
+
+        &::placeholder {
+            color: #A3A5AA;
+        }
+
+        &:focus {
+            outline: 0;
+        }
+    }
+
+#focus {
+    position: absolute;
+    border: 0px solid #79A1D4;
+    box-shadow: 0 0 10px 0 #79A1D4;
+    pointer-events: none;
+    z-index: 5;
+    border-radius: 10px;
+    display: none;
+}
+
+/* タグをカッコ内に表示 */
+.tags {
+    color: #888897;
+    font-size: 0.9em;
+    margin-left: 5px;
+}
+
+.main-fotter-button {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    /* 余白を追加 */
+    background-color: #FFEED5;
+    /* 背景色をmain-contentsと一致させる */
+}
+
+#save-to-folder {
+    padding: 10px 20px;
+    /* ボタンの内側の余白 */
+    background-color: #79A1D4;
+    /* 背景色 */
+    color: #EAE4DA;
+    /* テキストの色 */
+    border: none;
+    /* ボーダーを消す */
+    border-radius: 5px;
+    /* 角を丸くする */
+    cursor: pointer;
+    /* カーソルをポインタに */
+    z-index: 1;
+    /* 他の要素より前に表示する */
+}
+
+#save:hover {
+    background-color: #ABCAE8; /* マウスオーバー時の背景色を薄くする */
+}
+
+.main-contents.expanded {
+    margin-left: 3%;  /* side-menu1の幅 */
+    width: calc(100% - 5%);  /* 残りの幅全てを使用 */
+}
+
+.main-contents.collapsed {
+    margin-left: calc(30%);  /* side-menu1とside-menu2の幅の合計 */
+}
+
+h1 {
+    font-size: 50px;
+}
+
+#memo {
+    height: 300px;
+    /* 高さを300pxに設定 */
+}
+
+.hidden {
+    display: none;
+}
